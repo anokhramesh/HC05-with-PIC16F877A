@@ -1,0 +1,37 @@
+#include <xc.h>
+#define _XTAL_FREQ 20000000
+__CONFIG(FOSC_HS & WDTE_OFF & PWRTE_OFF & BOREN_OFF & LVP_OFF & CPD_OFF & WRT_OFF & CP_OFF);//configuration bit setting
+unsigned char y=0;
+void interrupt RECEIVE()
+{
+if(PIR1bits. RCIF==1)
+{
+	y=RCREG;
+ PIR1bits. RCIF = 0;
+}
+}
+void main()
+{
+	INTCONbits.GIE = 1;
+	INTCONbits.PEIE = 1;
+	PIE1bits.RCIE = 1;
+	    
+	    TXSTA=0X24;
+        RCSTA=0X90;
+
+	     SPBRG = 129; 
+
+	TRISC = 0x80;
+	TRISB5 = 0;
+	while(1)
+	{
+		if(y == 'a')
+		{
+			PORTBbits.RB5 = 1;
+		}
+		if(y == 'b')
+		{
+			PORTBbits.RB7 = 0;
+		}
+	}
+}
